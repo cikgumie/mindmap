@@ -1,0 +1,119 @@
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.header h1 {
+    margin: 0 0 10px 0;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.header p {
+    margin: 0;
+    font-size: 1.2em;
+    opacity: 0.9;
+}
+
+#mindmap {
+    width: 100%;
+    max-width: 1200px;
+    height: 700px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+
+.controls {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn {
+    padding: 10px 20px;
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 25px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.btn:hover {
+    background: rgba(255,255,255,0.3);
+    border-color: rgba(255,255,255,0.5);
+    transform: translateY(-2px);
+}
+
+.info-card {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 20px;
+    color: white;
+    max-width: 800px;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.info-card h3 {
+    margin-top: 0;
+    color: #fff;
+}
+
+.info-card ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.info-card li {
+    padding: 5px 0;
+    border-left: 3px solid rgba(255,255,255,0.5);
+    padding-left: 15px;
+    margin: 5px 0;
+}
+
+/* Custom styles for nodes */
+.node circle {
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 3px;
+    cursor: pointer;
+}
+
+.node text {
+    font: 12px sans-serif;
+    cursor: pointer;
+}
+
+.link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 2px;
+}
+
+.node--internal circle {
+    fill: #lightsteelblue;
+}
+
+.node--internal text {
+    text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
+}
