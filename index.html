@@ -6,6 +6,7 @@
     <title>Mind Map API Markmap</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div class="header">
@@ -19,16 +20,9 @@
         <button class="btn" onclick="resetView()">↻ Reset View</button>
         <button class="btn" onclick="expandAll()">⊞ Expand All</button>
         <button class="btn" onclick="collapseAll()">⊟ Collapse All</button>
-    </div>
-
-    <div class="info-card">
-        <h3>📋 Komponen Utama API Markmap</h3>
-        <ul>
-            <li><strong>markmap-lib:</strong> Core library untuk parsing Markdown dan transformasi data</li>
-            <li><strong>markmap-view:</strong> Library untuk rendering mind map interaktif di browser</li>
-            <li><strong>markmap-render:</strong> Tool untuk generate HTML standalone</li>
-            <li><strong>markmap-autoloader:</strong> Auto-loader untuk deteksi dan inisialisasi otomatis</li>
-        </ul>
+        <button class="btn" onclick="zoomIn()">🔍+ Zoom In</button>
+        <button class="btn" onclick="zoomOut()">🔍- Zoom Out</button>
+        <button class="btn" onclick="downloadPDF()">📄 Download PDF</button>
     </div>
 
     <script>
@@ -44,21 +38,11 @@
                             children: [
                                 {
                                     name: "Functions",
-                                    children: [
-                                        { name: "transform()" },
-                                        { name: "getAssets()" },
-                                        { name: "getUsedAssets()" },
-                                        { name: "parse()" }
-                                    ]
+                                    children: [ { name: "transform()" }, { name: "getAssets()" }, { name: "getUsedAssets()" }, { name: "parse()" } ]
                                 },
                                 {
                                     name: "Features",
-                                    children: [
-                                        { name: "Markdown Parsing" },
-                                        { name: "Plugin Support" },
-                                        { name: "KaTeX Math" },
-                                        { name: "Prism Highlighting" }
-                                    ]
+                                    children: [ { name: "Markdown Parsing" }, { name: "Plugin Support" }, { name: "KaTeX Math" }, { name: "Prism Highlighting" } ]
                                 }
                             ]
                         },
@@ -67,21 +51,11 @@
                             children: [
                                 {
                                     name: "Methods",
-                                    children: [
-                                        { name: "Markmap.create()" },
-                                        { name: "setData()" },
-                                        { name: "fit()" },
-                                        { name: "destroy()" }
-                                    ]
+                                    children: [ { name: "Markmap.create()" }, { name: "setData()" }, { name: "fit()" }, { name: "destroy()" } ]
                                 },
                                 {
                                     name: "Features",
-                                    children: [
-                                        { name: "Interactive Rendering" },
-                                        { name: "Zoom & Pan" },
-                                        { name: "Node Expansion" },
-                                        { name: "Animation" }
-                                    ]
+                                    children: [ { name: "Interactive Rendering" }, { name: "Zoom & Pan" }, { name: "Node Expansion" }, { name: "Animation" } ]
                                 }
                             ]
                         },
@@ -90,29 +64,17 @@
                             children: [
                                 {
                                     name: "Functions",
-                                    children: [
-                                        { name: "fillTemplate()" },
-                                        { name: "buildURL()" },
-                                        { name: "loadAssets()" }
-                                    ]
+                                    children: [ { name: "fillTemplate()" }, { name: "buildURL()" }, { name: "loadAssets()" } ]
                                 },
                                 {
                                     name: "Features",
-                                    children: [
-                                        { name: "HTML Generation" },
-                                        { name: "Asset Management" },
-                                        { name: "Template System" }
-                                    ]
+                                    children: [ { name: "HTML Generation" }, { name: "Asset Management" }, { name: "Template System" } ]
                                 }
                             ]
                         },
                         {
                             name: "markmap-autoloader",
-                            children: [
-                                { name: "Auto Detection" },
-                                { name: "Dynamic Loading" },
-                                { name: "Multiple Support" }
-                            ]
+                            children: [ { name: "Auto Detection" }, { name: "Dynamic Loading" }, { name: "Multiple Support" } ]
                         }
                     ]
                 },
@@ -121,27 +83,15 @@
                     children: [
                         {
                             name: "NPM",
-                            children: [
-                                { name: "npm install markmap-lib" },
-                                { name: "npm install markmap-view" },
-                                { name: "npm install markmap-render" }
-                            ]
+                            children: [ { name: "npm install markmap-lib" }, { name: "npm install markmap-view" }, { name: "npm install markmap-render" } ]
                         },
                         {
                             name: "CDN",
-                            children: [
-                                { name: "D3.js dependency" },
-                                { name: "Markmap scripts" },
-                                { name: "Auto-loader" }
-                            ]
+                            children: [ { name: "D3.js dependency" }, { name: "Markmap scripts" }, { name: "Auto-loader" } ]
                         },
                         {
                             name: "CLI",
-                            children: [
-                                { name: "markmap-cli" },
-                                { name: "File processing" },
-                                { name: "Watch mode" }
-                            ]
+                            children: [ { name: "markmap-cli" }, { name: "File processing" }, { name: "Watch mode" } ]
                         }
                     ]
                 },
@@ -150,29 +100,15 @@
                     children: [
                         {
                             name: "Visual Options",
-                            children: [
-                                { name: "Colors & Themes" },
-                                { name: "Font Settings" },
-                                { name: "Layout Options" },
-                                { name: "Animation Duration" }
-                            ]
+                            children: [ { name: "Colors & Themes" }, { name: "Font Settings" }, { name: "Layout Options" }, { name: "Animation Duration" } ]
                         },
                         {
                             name: "Functional Options",
-                            children: [
-                                { name: "Max Width" },
-                                { name: "Auto-fit" },
-                                { name: "Pan & Zoom Limits" },
-                                { name: "Initial Zoom" }
-                            ]
+                            children: [ { name: "Max Width" }, { name: "Auto-fit" }, { name: "Pan & Zoom Limits" }, { name: "Initial Zoom" } ]
                         },
                         {
                             name: "Plugins",
-                            children: [
-                                { name: "KaTeX Plugin" },
-                                { name: "Prism Plugin" },
-                                { name: "Custom Renderers" }
-                            ]
+                            children: [ { name: "KaTeX Plugin" }, { name: "Prism Plugin" }, { name: "Custom Renderers" } ]
                         }
                     ]
                 },
@@ -181,27 +117,15 @@
                     children: [
                         {
                             name: "Frontend Frameworks",
-                            children: [
-                                { name: "React Components" },
-                                { name: "Vue Integration" },
-                                { name: "Angular Support" }
-                            ]
+                            children: [ { name: "React Components" }, { name: "Vue Integration" }, { name: "Angular Support" } ]
                         },
                         {
                             name: "Static Sites",
-                            children: [
-                                { name: "Jekyll Plugin" },
-                                { name: "Hugo Shortcodes" },
-                                { name: "MkDocs Integration" }
-                            ]
+                            children: [ { name: "Jekyll Plugin" }, { name: "Hugo Shortcodes" }, { name: "MkDocs Integration" } ]
                         },
                         {
                             name: "Node.js",
-                            children: [
-                                { name: "Server-side Rendering" },
-                                { name: "API Endpoints" },
-                                { name: "Batch Processing" }
-                            ]
+                            children: [ { name: "Server-side Rendering" }, { name: "API Endpoints" }, { name: "Batch Processing" } ]
                         }
                     ]
                 }
