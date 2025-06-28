@@ -6,37 +6,35 @@ const height = 660 - margin.top - margin.bottom;
 let i = 0;
 const duration = 750;
 let root;
+let zoom;
 
 // Create tree layout
 const tree = d3.tree().size([height, width]);
 
-// Create SVG
+// Create SVG with zoom and pan functionality
 const svg = d3.select("#mindmap")
     .attr("width", width + margin.right + margin.left)
-    .attr("height", height + margin.top + margin.bottom);
+    .attr("height", height + margin.top + margin.bottom)
+    .call(zoom = d3.zoom()
+        .scaleExtent([0.1, 4])
+        .on("zoom", (event) => {
+            g.attr("transform", event.transform);
+        }))
+    .on("dblclick.zoom", null); // Disable double-click zoom
 
-const g = svg.append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-// Color scale
-const color = d3.scaleOrdinal(d3.schemeCategory10);
+const g = svg.append("g");
 
 // Initialize
 root = d3.hierarchy(treeData, d => d.children);
 root.x0 = height / 2;
 root.y0 = 0;
 
+// Set initial view
+resetView(); 
 // Collapse nodes initially
-function collapse(d) {
-    if (d.children) {
-        d._children = d.children;
-        d._children.forEach(collapse);
-        d.children = null;
-    }
-}
-
 root.children.forEach(collapse);
 update(root);
+
 
 function update(source) {
     // Compute new tree layout
@@ -150,6 +148,8 @@ function diagonal(s, d) {
 
 // Toggle children on click
 function click(event, d) {
+    // Prevent click event from propagating to the SVG's zoom handler
+    event.stopPropagation(); 
     if (d.children) {
         d._children = d.children;
         d.children = null;
@@ -163,6 +163,11 @@ function click(event, d) {
 // Control functions
 function resetView() {
     root.children.forEach(collapse);
+    // Reset zoom and pan
+    svg.transition().duration(750).call(
+        zoom.transform,
+        d3.zoomIdentity.translate(margin.left, margin.top).scale(1)
+    );
     update(root);
 }
 
@@ -181,13 +186,94 @@ function expandAll() {
 }
 
 function collapseAll() {
-    function collapse(d) {
-        if (d.children) {
-            d._children = d.children;
-            d._children.forEach(collapse);
-            d.children = null;
-        }
-    }
-    root.children.forEach(collapse);
+    collapse(root);
     update(root);
+}
+
+// Collapse helper function (recursive)
+function collapse(d) {
+    if (d.children) {
+        d._children = d.children;
+        d._children.forEach(collapse);
+        d.children = null;
+    }
+}
+
+
+// Zoom functions
+function zoomIn() {
+    svg.transition().duration(300).call(zoom.scaleBy, 1.5);
+}
+
+function zoomOut() {
+    svg.transition().duration(300).call(zoom.scaleBy, 1 / 1.5);
+}
+
+// Download PDF function
+function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('landscape', 'mm', 'a4');
+    
+    // Get SVG element and its current dimensions
+    const svgElement = document.getElementById('mindmap');
+    const svgWidth = svgElement.clientWidth;
+    const svgHeight = svgElement.clientHeight;
+    
+    // Create a temporary clone of the SVG to reset its transform for rendering
+    const clonedSvgNode = svgElement.cloneNode(true);
+    d3.select(clonedSvgNode).select('g').attr('transform', null);
+    const svgData = new XMLSerializer().serializeToString(clonedSvgNode);
+
+    const canvas = document.createElement('canvas');
+    canvas.width = svgWidth;
+    canvas.height = svgHeight;
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    
+    const svgBlob = new Blob([svgData], {type: 'image/svg+xml;charset=utf-8'});
+    const url = URL.createObjectURL(svgBlob);
+    
+    img.onload = function() {
+        // Fill white background on canvas
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        URL.revokeObjectURL(url);
+        
+        const imgData = canvas.toDataURL('image/png');
+        
+        // PDF metadata and title
+        pdf.setFontSize(20);
+        pdf.text('Mind Map API Markmap', 15, 20);
+        
+        // Image dimensions in PDF (A4 landscape: 297x210 mm)
+        const pdfMargin = 15;
+        const pdfPageWidth = pdf.internal.pageSize.getWidth();
+        const pdfPageHeight = pdf.internal.pageSize.getHeight();
+        const contentWidth = pdfPageWidth - 2 * pdfMargin;
+        const contentHeight = pdfPageHeight - 2 * pdfMargin - 20; // Space for title
+        
+        const imgAspectRatio = canvas.width / canvas.height;
+        let finalImgWidth = contentWidth;
+        let finalImgHeight = finalImgWidth / imgAspectRatio;
+        
+        if (finalImgHeight > contentHeight) {
+            finalImgHeight = contentHeight;
+            finalImgWidth = finalImgHeight * imgAspectRatio;
+        }
+        
+        const x = (pdfPageWidth - finalImgWidth) / 2;
+        const y = pdfMargin + 20;
+
+        pdf.addImage(imgData, 'PNG', x, y, finalImgWidth, finalImgHeight);
+        
+        // Footer
+        pdf.setFontSize(8);
+        pdf.setTextColor(150);
+        pdf.text(`Generated on ${new Date().toLocaleDateString()}`, pdfMargin, pdfPageHeight - 10);
+        
+        pdf.save('markmap-api-mindmap.pdf');
+    };
+    
+    img.src = url;
 }
