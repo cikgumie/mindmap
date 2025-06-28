@@ -63,32 +63,13 @@ body {
     transform: translateY(-2px);
 }
 
-.info-card {
-    background: rgba(255,255,255,0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    padding: 20px;
-    margin-top: 20px;
-    color: white;
-    max-width: 800px;
-    border: 1px solid rgba(255,255,255,0.2);
+/* Cursor styles for zoom and pan */
+#mindmap {
+    cursor: grab;
 }
 
-.info-card h3 {
-    margin-top: 0;
-    color: #fff;
-}
-
-.info-card ul {
-    list-style-type: none;
-    padding-left: 0;
-}
-
-.info-card li {
-    padding: 5px 0;
-    border-left: 3px solid rgba(255,255,255,0.5);
-    padding-left: 15px;
-    margin: 5px 0;
+#mindmap:active {
+    cursor: grabbing;
 }
 
 /* Custom styles for nodes */
